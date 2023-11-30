@@ -1,15 +1,19 @@
-chrome.commands.onCommand.addListener((command) => {
-    if (command === 'mingle') {
-        // chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        //   chrome.tabs.sendMessage(tabs[0].id, { action: 'mingle' });
-        // });
-        console.log("Mingle");
-      }
-  });
-  
-// chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-//     if (request.action === "highlightText") {
-//         chrome.tabs.sendMessage(sender.tab.id, { action: 'openPopup'});
-//     }
-// });
+// function triggerOverlayAndApiCall() {
+//   chrome.tabs.sendMessage(tab.id, {action: "triggerMingle"});
+// }
+
+
+chrome.commands.onCommand.addListener(function(command) {
+  if (command === "mingle") {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+      chrome.tabs.sendMessage(tabs[0].id, {action: "triggerMingle"});
+      // chrome.scripting.executeScript({
+      //   target: { tabId: tabs[0].id },
+      //   function: triggerOverlayAndApiCall
+      // });
+    });
+  }
+});
+
 
