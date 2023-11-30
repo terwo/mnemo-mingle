@@ -7,18 +7,24 @@
         "128": "images/icon.png"
     },
     "permissions": [
-        "activeTab"
-],
+        "activeTab",
+        "scripting"
+    ],
     "commands": {
-        "highlight-text": {
-          "suggested_key": {
-            "default": "Q"
-          },
-          "description": "Highlight text and show popup"
+        "mingle": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+F",
+                "mac": "Command+Shift+F"
+              },
+          "description": "Generate information for the highlighted text"
         }
-    },
+      },
+      
     "action": {
-        "default_popup": "popup.html",
+        "default_popup": "popup/popup.html",
         "default_icon": "images/icon.png"
-    }
+    },
+    "background": {
+        "service_worker": "service-worker.js"
+  }
 }
