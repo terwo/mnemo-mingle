@@ -1,7 +1,7 @@
 let overlay = null;
 // does ^ need to be null?
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("In content.js!");
   if (request.action === "triggerMingle") {
     const selection = window.getSelection();
@@ -18,11 +18,22 @@ function showOverlayWithHighlightedText(selection) {
   const rect = range.getBoundingClientRect();
 
   overlay = document.createElement('div');
-  overlay.textContent = `Selected Text: ${selection.toString()}`;
   overlay.style.position = 'absolute';
   overlay.style.left = `${rect.left + window.scrollX}px`;
   overlay.style.top = `${rect.bottom + window.scrollY}px`;
-  // Add more styling as needed
+  overlay.style.backgroundColor = "orange";
+  overlay.style.zIndex = "10000";
+  overlay.style.padding = '10px';
+  overlay.style.borderRadius = '5px';
+  overlay.textContent = `Loading mnemonic for ${selection.toString()}`;
+  // Create an img element
+  //const imageElement = document.createElement('img');
+  // Set the src attribute to the URL of your image
+  // imageElement.src = 'images/person.png';
+  // Add more image styling if needed
+  // imageElement.style.width = '100px'; // Adjust as needed
+
+  // overlay.appendChild(imageElement);
 
   document.body.appendChild(overlay);
 }
@@ -33,29 +44,43 @@ function updateOverlayWithMnemonic(mnemonic) {
   }
 }
 
-function callYourApi(selectedText) {
-  const apiKey = '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';
-  const prompt = `Create a mnemonic for the word '${selectedText}'`;
+document.addEventListener('click', function (event) {
+  if (overlay && !overlay.contains(event.target)) {
+    overlay.remove();
+  }
+});
 
-  fetch('https://api.openai.com/v1/models/gpt-3.5-turbo-instruct', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
+async function callYourApi(selectedText) {
+  const prompt = `${selectedText}`;
+  chrome.runtime.sendMessage(
+    {
+      contentScriptQuery: 'chatCompletion',
+      prompt,
     },
-    body: JSON.stringify({
-      prompt: prompt,
-      max_tokens: 60
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Success:', data);
-    updateOverlayWithMnemonic(data.choices[0].text);
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-    updateOverlayWithMnemonic('Error fetching mnemonic');
-  });
+    response => {
+      console.log(response);
+      updateOverlayWithMnemonic(response.choices[0].message.content);
+    });
+
+  // fetch(`${apiUrl}`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${apiKey}`
+  //   },
+  //   body: JSON.stringify({
+  //     prompt: prompt,
+  //     max_tokens: 60
+  //   })
+  // })
+  // .then(response => response.json())
+  // .then(data => {
+  //   console.log('Success:', data);
+  //   updateOverlayWithMnemonic(data.choices[0].text);
+  // })
+  // .catch((error) => {
+  //   console.error('Error:', error);
+  //   updateOverlayWithMnemonic('Error fetching mnemonic');
+  // });
 }
 
