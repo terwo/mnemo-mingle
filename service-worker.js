@@ -17,14 +17,15 @@ chrome.commands.onCommand.addListener(function (command) {
 
 // import { config } from './config.js';
 //  const apiKey = config;
-const apiKey = "SECRET KEY";
-const apiUrl = 'https://api.openai.com/v1/chat/completions';
+const apiKey = "HIDDEN SOMEWHERE";
+const apiTextUrl = 'https://api.openai.com/v1/chat/completions';
+const apiImageUrl = 'https://api.openai.com/v1/images/generations';
 
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     console.log({ request, sender, sendResponse });
     if (request.contentScriptQuery == 'chatCompletion') {
-      fetch(apiUrl, {
+      fetch(apiTextUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,6 +55,29 @@ chrome.runtime.onMessage.addListener(
           }],
           max_tokens: 150,
           model: "gpt-3.5-turbo",
+        })
+      })
+        .then(response => response.json()).then(data => {
+          console.log({ data })
+          sendResponse(data);
+        }).catch(error => {
+          console.log({ error });
+          sendResponse(error);
+        })
+      return true
+    }
+    if (request.contentScriptQuery == 'imageCompletion') {
+      fetch(apiImageUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          prompt: `A funny image to help me remember the word ${request.prompt}`,
+          n: 1,
+          size: "256x256",
+          model: "dall-e-2"
         })
       })
         .then(response => response.json()).then(data => {

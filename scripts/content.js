@@ -8,7 +8,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (selection.toString().length > 0) {
       console.log("Here in triggerMingle");
       showOverlayWithHighlightedText(selection);
-      callYourApi(selection.toString());
+      callImageApi(selection.toString());
+      callTextApi(selection.toString());
+
+
     }
   }
 });
@@ -26,14 +29,6 @@ function showOverlayWithHighlightedText(selection) {
   overlay.style.padding = '10px';
   overlay.style.borderRadius = '5px';
   overlay.textContent = `Loading mnemonic for ${selection.toString()}`;
-  // Create an img element
-  //const imageElement = document.createElement('img');
-  // Set the src attribute to the URL of your image
-  // imageElement.src = 'images/person.png';
-  // Add more image styling if needed
-  // imageElement.style.width = '100px'; // Adjust as needed
-
-  // overlay.appendChild(imageElement);
 
   document.body.appendChild(overlay);
 }
@@ -44,13 +39,24 @@ function updateOverlayWithMnemonic(mnemonic) {
   }
 }
 
+function updateOverlayWithImage(image) {
+  if (overlay) {
+    const imageElement = document.createElement('img');
+    imageElement.src = image;
+    imageElement.style.width = '100px'; // Adjust as needed
+
+    overlay.appendChild(imageElement);
+  }
+
+}
+
 document.addEventListener('click', function (event) {
   if (overlay && !overlay.contains(event.target)) {
     overlay.remove();
   }
 });
 
-async function callYourApi(selectedText) {
+async function callTextApi(selectedText) {
   const prompt = `${selectedText}`;
   chrome.runtime.sendMessage(
     {
@@ -62,25 +68,17 @@ async function callYourApi(selectedText) {
       updateOverlayWithMnemonic(response.choices[0].message.content);
     });
 
-  // fetch(`${apiUrl}`, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${apiKey}`
-  //   },
-  //   body: JSON.stringify({
-  //     prompt: prompt,
-  //     max_tokens: 60
-  //   })
-  // })
-  // .then(response => response.json())
-  // .then(data => {
-  //   console.log('Success:', data);
-  //   updateOverlayWithMnemonic(data.choices[0].text);
-  // })
-  // .catch((error) => {
-  //   console.error('Error:', error);
-  //   updateOverlayWithMnemonic('Error fetching mnemonic');
-  // });
 }
 
+async function callImageApi(selectedText) {
+  const prompt = `${selectedText}`;
+  chrome.runtime.sendMessage(
+    {
+      contentScriptQuery: 'imageCompletion',
+      prompt,
+    },
+    response => {
+      console.log(response);
+      updateOverlayWithImage(response.data[0].url);
+    });
+}
