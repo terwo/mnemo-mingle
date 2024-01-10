@@ -1,5 +1,4 @@
 let overlay = null;
-// does ^ need to be null?
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("In content.js!");
@@ -11,7 +10,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       callImageApi(selection.toString());
       callTextApi(selection.toString());
 
-
     }
   }
 });
@@ -20,8 +18,12 @@ function showOverlayWithHighlightedText(selection) {
   const range = selection.getRangeAt(0);
   const rect = range.getBoundingClientRect();
 
+  const viewportWidth = window.innerWidth;
+  const overlayWidth = viewportWidth / 4;
+
   overlay = document.createElement('div');
   overlay.style.position = 'absolute';
+  // overlay.style.width = `${overlayWidth}px`;
   overlay.style.left = `${rect.left + window.scrollX}px`;
   overlay.style.top = `${rect.bottom + window.scrollY}px`;
   overlay.style.backgroundColor = "orange";
@@ -31,14 +33,29 @@ function showOverlayWithHighlightedText(selection) {
   overlay.style.display = 'flex';
   overlay.style.flexDirection = 'column';
   overlay.style.fontFamily = 'sans-serif';
-  overlay.textContent = `Mingling a mnemonic for the word ${selection.toString()}`;
+  overlay.style.whiteSpace = 'pre-line';
 
+
+  // Title of overlay
+  const title = document.createElement('div');
+  title.textContent = "MnemoMingle";
+  title.style.fontWeight = 'bold';
+  title.style.fontSize = '16px';
+  title.style.marginBottom = '5px';
+
+  // Text content of overlay
+  let mnemonic = document.createElement('div');
+  mnemonic.textContent = `Mingling a mnemonic for the word ${selection.toString()}`;
+
+  overlay.appendChild(title);
+  overlay.appendChild(mnemonic);
   document.body.appendChild(overlay);
 }
 
 function updateOverlayWithMnemonic(mnemonic) {
   if (overlay) {
-    overlay.textContent = mnemonic;
+    const example = overlay.lastChild;
+    example.textContent = mnemonic;
   }
 }
 
