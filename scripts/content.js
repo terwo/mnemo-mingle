@@ -23,7 +23,6 @@ function showOverlayWithHighlightedText(selection) {
 
   overlay = document.createElement('div');
   overlay.style.position = 'absolute';
-  // overlay.style.width = `${overlayWidth}px`;
   overlay.style.left = `${rect.left + window.scrollX}px`;
   overlay.style.top = `${rect.bottom + window.scrollY}px`;
   overlay.style.backgroundColor = "orange";

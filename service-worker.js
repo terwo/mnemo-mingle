@@ -6,7 +6,7 @@ chrome.commands.onCommand.addListener(function (command) {
   }
 });
 
-const apiKey = "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";
+const apiKey = key;
 const apiTextUrl = 'https://api.openai.com/v1/chat/completions';
 const apiImageUrl = 'https://api.openai.com/v1/images/generations';
 
