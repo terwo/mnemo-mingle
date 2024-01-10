@@ -28,7 +28,10 @@ function showOverlayWithHighlightedText(selection) {
   overlay.style.zIndex = "10000";
   overlay.style.padding = '10px';
   overlay.style.borderRadius = '5px';
-  overlay.textContent = `Loading mnemonic for ${selection.toString()}`;
+  overlay.style.display = 'flex';
+  overlay.style.flexDirection = 'column';
+  overlay.style.fontFamily = 'sans-serif';
+  overlay.textContent = `Mingling a mnemonic for the word ${selection.toString()}`;
 
   document.body.appendChild(overlay);
 }
