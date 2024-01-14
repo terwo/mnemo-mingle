@@ -8,13 +8,13 @@ This was my first time working with Chrome extensions, and I'm glad that I was a
 What I struggled with the most was passing information from the client side to the backend service worker, where I eventaully realized I had to use the chrome.runtime.sendMessage and chrome.runtime.onMessage for proper message passing.
 
 # Screenshots of UI
-Mingling the word "menagerie," inspired by the short-story "The Paper Menagerie" by Ken Liu. A touching story of a son rekindling himself with his Chinese heritage after stumbling upon his late mother.
+Mingling the word "menagerie," inspired by the short-story "The Paper Menagerie" by Ken Liu.
 <img width="1197" alt="Screen Shot 2024-01-09 at 10 51 51 PM" src="https://github.com/terwo/mnemo-mingle/assets/105677497/b6285ce6-13d6-41de-83df-6894bdc9342f">
 
-Mingling the word "philosophique," found on the official website for Le Petit Prince. A classic of world literature, whose messages about interpersonal relationships I firmly believe in.
+Mingling the word "philosophique," found on the official website for Le Petit Prince.
 <img width="1318" alt="Screen Shot 2024-01-09 at 10 45 42 PM" src="https://github.com/terwo/mnemo-mingle/assets/105677497/7f639cf3-1f5c-486a-a56a-b46d573ff66a">
 
-Mingling the word "插嘴," which means to interrupt, from the reflective essay《背影》by Zhu Ziqing. The father's love he has for his son is expressed subtlety and sincerely through seemingly mundane events.
+Mingling the word "插嘴," which means to interrupt, from the reflective essay《背影》by Zhu Ziqing.
 <img width="867" alt="Screen Shot 2024-01-09 at 10 48 24 PM" src="https://github.com/terwo/mnemo-mingle/assets/105677497/e124f765-e9ab-490e-b635-90de1016e4ba">
 
 
